@@ -1,0 +1,40 @@
+{
+    "name": "swag/disable-store-api-cache",
+    "description": "Disables the store-api object cache layer, which is redundant when an HTTP cache (reverse proxy / Symfony HTTP cache) is in front.",
+    "version": "1.0.0",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Swag\\DisableStoreApiCache\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "shopware AG",
+            "homepage": "https://www.shopware.com"
+        }
+    ],
+    "extra": {
+        "shopware-plugin-class": "Swag\\DisableStoreApiCache\\SwagDisableStoreApiCache",
+        "label": {
+            "de-DE": "Store-API Object-Cache deaktivieren",
+            "en-GB": "Disable Store-API object cache"
+        },
+        "description": {
+            "de-DE": "Deaktiviert die Store-API Object-Cache-Schicht (Cached*Route Decorators). Sinnvoll, wenn ein HTTP-Cache bzw. Reverse Proxy vorgeschaltet ist und der Object-Cache nur Overhead erzeugt.",
+            "en-GB": "Disables the store-api object cache layer (Cached*Route decorators). Useful when an HTTP cache or reverse proxy sits in front, where the object cache only adds overhead."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://www.shopware.com",
+            "en-GB": "https://www.shopware.com"
+        },
+        "supportLink": {
+            "de-DE": "https://www.shopware.com",
+            "en-GB": "https://www.shopware.com"
+        }
+    },
+    "require": {
+        "shopware/core": "~6.6.0"
+    }
+}
