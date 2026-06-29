@@ -28,8 +28,19 @@ jobs:
         with:
           extensionName: SwagDisableStoreApiCache
           shopwareVersion: 6.6.x
-          install: true
+          install: false
+          # Keep the local path repository so Composer symlinks the checked-out
+          # working tree instead of downloading a tagged archive from the repo.
+          extraRepositories: |
+            {
+              "swag-disable-store-api-cache": {
+                "type": "path",
+                "url": "custom/plugins/SwagDisableStoreApiCache",
+                "options": { "symlink": true }
+              }
+            }
 
-      - uses: shopware/github-actions/phpunit@main
+      - name: Run PHPUnit
+        uses: shopware/github-actions/phpunit@main
         with:
           extensionName: SwagDisableStoreApiCache
