@@ -2,6 +2,7 @@
     "name": "swag/disable-store-api-cache",
     "description": "Disables the store-api object cache layer, which is redundant when an HTTP cache (reverse proxy / Symfony HTTP cache) is in front.",
     "type": "shopware-platform-plugin",
+    "version": "0.2.0",
     "license": "MIT",
     "autoload": {
         "psr-4": {
