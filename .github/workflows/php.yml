@@ -11,7 +11,8 @@ jobs:
     name: Verify
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Clone
+        uses: actions/checkout@v7
 
       - name: Verify extension
         uses: shopware/github-actions/extension-verifier@main
