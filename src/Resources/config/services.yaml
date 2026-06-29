@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/symfony/dependency-injection/7.4/Loader/schema/services.schema.json
+services:
+    Swag\DisableStoreApiCache\Cache\ProductDetailRouteTagDecorator:
+        decorates: Shopware\Core\Content\Product\SalesChannel\Detail\ProductDetailRoute
+        decoration_priority: -2000
+        arguments:
+            - '@Swag\DisableStoreApiCache\Cache\ProductDetailRouteTagDecorator.inner'
+            - '@event_dispatcher'
+
+    Swag\DisableStoreApiCache\Cache\ProductListingRouteTagDecorator:
+        decorates: Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute
+        decoration_priority: -2000
+        arguments:
+            - '@Swag\DisableStoreApiCache\Cache\ProductListingRouteTagDecorator.inner'
+            - '@event_dispatcher'
+
+    Swag\DisableStoreApiCache\Cache\ProductReviewRouteTagDecorator:
+        decorates: Shopware\Core\Content\Product\SalesChannel\Review\ProductReviewRoute
+        decoration_priority: -2000
+        arguments:
+            - '@Swag\DisableStoreApiCache\Cache\ProductReviewRouteTagDecorator.inner'
+            - '@event_dispatcher'
+
+    Swag\DisableStoreApiCache\Cache\ProductCrossSellingRouteTagDecorator:
+        decorates: Shopware\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRoute
+        decoration_priority: -2000
+        arguments:
+            - '@Swag\DisableStoreApiCache\Cache\ProductCrossSellingRouteTagDecorator.inner'
+            - '@event_dispatcher'

@@ -1,0 +1,10 @@
+compatibility_date: '2026-06-29'
+
+validation:
+  ignore:
+    # The whole purpose of this plugin is to disable the deprecated object-cache
+    # decorators (Cached*Route). Referencing those deprecated classes — to remove
+    # their service definitions and to re-emit their legacy route-name cache tags —
+    # is intentional, so the deprecation findings are expected.
+    - identifier: phpstan/classConstant.deprecatedClass
+    - identifier: phpstan/staticMethod.deprecatedClass

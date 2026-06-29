@@ -27,6 +27,28 @@ layer. The object cache underneath then only adds:
 This plugin removes that redundant layer so the original, undecorated routes are used
 directly.
 
+## Cache invalidation
+
+The HTTP cache is tagged independently of the object cache: the underlying routes
+dispatch `AddCacheTagEvent` themselves, and the `CacheInvalidationSubscriber` purges
+HTTP entries by those tags. So removing the object cache does **not** break HTTP
+invalidation for navigation, category, landing page or sitemap — they already emit the
+exact tag name the invalidation subscriber targets.
+
+Four product routes are the exception: in legacy mode the invalidation subscriber purges
+them by the decorator route name (e.g. `product-detail-route-{id}`), which only the
+removed object-cache decorator used to attach. To keep invalidation correct, this plugin
+ships small decorators on the real routes that re-emit those legacy tags:
+
+| Route | Re-emitted tag |
+|---|---|
+| `ProductDetailRoute` | `product-detail-route-{parentId}` |
+| `ProductListingRoute` | `product-listing-route-{categoryId}` |
+| `ProductReviewRoute` | `product-review-route-{productId}` |
+| `ProductCrossSellingRoute` | `cross-selling-route-{productId}` |
+
+These decorators only dispatch the tag and delegate straight to the inner route — they
+do not cache anything.
 
 ## Installation
 
@@ -41,6 +63,16 @@ Verify the decorators are gone:
 
 ```bash
 bin/console debug:container CachedProductDetailRoute   # should report "not found"
+```
+
+## Tests
+
+```bash
+# Unit tests (no database required)
+vendor/bin/phpunit -c phpunit.xml.dist
+
+# Integration tests (boots the kernel, installs the plugin; requires a test database)
+vendor/bin/phpunit -c phpunit.integration.xml.dist
 ```
 
 ## Compatibility

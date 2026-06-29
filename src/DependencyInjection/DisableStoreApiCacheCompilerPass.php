@@ -2,6 +2,16 @@
 
 namespace Swag\DisableStoreApiCache\DependencyInjection;
 
+use Shopware\Core\Content\Product\SalesChannel\Detail\CachedProductDetailRoute;
+use Shopware\Core\Content\Product\SalesChannel\Listing\CachedProductListingRoute;
+use Shopware\Core\Content\Product\SalesChannel\Search\CachedProductSearchRoute;
+use Shopware\Core\Content\Product\SalesChannel\Suggest\CachedProductSuggestRoute;
+use Shopware\Core\Content\Product\SalesChannel\Review\CachedProductReviewRoute;
+use Shopware\Core\Content\Product\SalesChannel\CrossSelling\CachedProductCrossSellingRoute;
+use Shopware\Core\Content\Category\SalesChannel\CachedNavigationRoute;
+use Shopware\Core\Content\Category\SalesChannel\CachedCategoryRoute;
+use Shopware\Core\Content\LandingPage\SalesChannel\CachedLandingPageRoute;
+use Shopware\Core\Content\Sitemap\SalesChannel\CachedSitemapRoute;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -18,18 +28,18 @@ class DisableStoreApiCacheCompilerPass implements CompilerPassInterface
      */
     private const CACHE_DECORATORS = [
         // Product
-        \Shopware\Core\Content\Product\SalesChannel\Detail\CachedProductDetailRoute::class,
-        \Shopware\Core\Content\Product\SalesChannel\Listing\CachedProductListingRoute::class,
-        \Shopware\Core\Content\Product\SalesChannel\Search\CachedProductSearchRoute::class,
-        \Shopware\Core\Content\Product\SalesChannel\Suggest\CachedProductSuggestRoute::class,
-        \Shopware\Core\Content\Product\SalesChannel\Review\CachedProductReviewRoute::class,
-        \Shopware\Core\Content\Product\SalesChannel\CrossSelling\CachedProductCrossSellingRoute::class,
+        CachedProductDetailRoute::class,
+        CachedProductListingRoute::class,
+        CachedProductSearchRoute::class,
+        CachedProductSuggestRoute::class,
+        CachedProductReviewRoute::class,
+        CachedProductCrossSellingRoute::class,
         // Category / Navigation / Landing page
-        \Shopware\Core\Content\Category\SalesChannel\CachedNavigationRoute::class,
-        \Shopware\Core\Content\Category\SalesChannel\CachedCategoryRoute::class,
-        \Shopware\Core\Content\LandingPage\SalesChannel\CachedLandingPageRoute::class,
+        CachedNavigationRoute::class,
+        CachedCategoryRoute::class,
+        CachedLandingPageRoute::class,
         // Sitemap
-        \Shopware\Core\Content\Sitemap\SalesChannel\CachedSitemapRoute::class,
+        CachedSitemapRoute::class,
     ];
 
     public function process(ContainerBuilder $container): void

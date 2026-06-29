@@ -8,6 +8,11 @@
             "Swag\\DisableStoreApiCache\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Swag\\DisableStoreApiCache\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "shopware AG",
