@@ -79,4 +79,37 @@ class DisableStoreApiCacheCompilerPassTest extends TestCase
 
         static::assertTrue($container->hasDefinition('some.unrelated.service'));
     }
+
+    public function testKeepsCachedRouteWhenAnotherServiceDecoratesIt(): void
+    {
+        $container = new ContainerBuilder();
+        $container->setDefinition(CachedProductDetailRoute::class, new Definition());
+
+        $foreign = new Definition();
+        $foreign->setDecoratedService(CachedProductDetailRoute::class);
+        $container->setDefinition('foreign.plugin.decorator', $foreign);
+
+        (new DisableStoreApiCacheCompilerPass())->process($container);
+
+        static::assertTrue(
+            $container->hasDefinition(CachedProductDetailRoute::class),
+            'Cache route must be kept when a foreign service decorates it directly'
+        );
+    }
+
+    public function testStillRemovesCachedRouteWhenForeignServiceDecoratesTheRealRoute(): void
+    {
+        $container = new ContainerBuilder();
+        $container->setDefinition(CachedProductDetailRoute::class, new Definition());
+
+        // A foreign decorator on the *real* route does not block removal: it keeps
+        // wrapping the real route once the cache decorator is gone.
+        $foreign = new Definition();
+        $foreign->setDecoratedService('Shopware\\Core\\Content\\Product\\SalesChannel\\Detail\\ProductDetailRoute');
+        $container->setDefinition('foreign.plugin.decorator', $foreign);
+
+        (new DisableStoreApiCacheCompilerPass())->process($container);
+
+        static::assertFalse($container->hasDefinition(CachedProductDetailRoute::class));
+    }
 }

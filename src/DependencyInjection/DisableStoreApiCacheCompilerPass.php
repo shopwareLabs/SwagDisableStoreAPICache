@@ -17,6 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Removes the store-api object cache decorators (`Cached*Route`).
+ *
+ * A cache decorator is kept if another service decorates it directly, because
+ * removing it would leave that foreign decorator with a missing inner service.
  */
 class DisableStoreApiCacheCompilerPass implements CompilerPassInterface
 {
@@ -44,10 +47,48 @@ class DisableStoreApiCacheCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
+        $decoratedServices = $this->collectDecoratedServiceIds($container);
+
         foreach (self::CACHE_DECORATORS as $serviceId) {
-            if ($container->hasDefinition($serviceId)) {
-                $container->removeDefinition($serviceId);
+            if (!$container->hasDefinition($serviceId)) {
+                continue;
             }
+
+            // Another plugin decorates this cache route directly. Removing it would
+            // leave that decorator pointing at a missing inner service, so keep the
+            // cache layer in place rather than break the foreign decoration.
+            if (isset($decoratedServices[$serviceId])) {
+                continue;
+            }
+
+            $container->removeDefinition($serviceId);
         }
+    }
+
+    /**
+     * Maps every service id that is decorated by some definition to true, ignoring
+     * the cache decorators themselves (they decorate the real routes, not each other).
+     *
+     * @return array<string, true>
+     */
+    private function collectDecoratedServiceIds(ContainerBuilder $container): array
+    {
+        $cacheDecorators = array_fill_keys(self::CACHE_DECORATORS, true);
+
+        $decorated = [];
+        foreach ($container->getDefinitions() as $id => $definition) {
+            if (isset($cacheDecorators[$id])) {
+                continue;
+            }
+
+            $decoratedService = $definition->getDecoratedService();
+            if ($decoratedService === null) {
+                continue;
+            }
+
+            $decorated[$decoratedService[0]] = true;
+        }
+
+        return $decorated;
     }
 }
